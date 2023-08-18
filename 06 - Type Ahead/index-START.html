@@ -20,8 +20,11 @@
       const cities = [];
       fetch(endpoint)
         .then((res) => res.json())
-        .then((data) => cities.push(...data));
-      console.log(cities);
+        .then((data) => cities.push(...data))
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+      // console.log(cities);
 
       function matchCity(word, cities) {
         return cities.filter((place) => {
