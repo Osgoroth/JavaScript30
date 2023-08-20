@@ -45,6 +45,7 @@ setInterval(() => {
   //   console.log(currentPercent);
 }, 1000);
 
+video.addEventListener("click", togglePlay);
 playButton.addEventListener("click", togglePlay);
 volumeButton.addEventListener("change", changeVolume);
 playbackRateButton.addEventListener("change", changePlaybackRate);
