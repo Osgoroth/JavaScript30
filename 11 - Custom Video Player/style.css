@@ -103,6 +103,7 @@ body {
   width: 50%;
   background: #ffc600;
   flex: 0;
+  transition: flex-basis 0.5s;
   flex-basis: 0%;
 }
 

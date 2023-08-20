@@ -20,16 +20,20 @@ function togglePlay() {
 }
 
 function handleRangeUpdate() {
-  console.log(this.name);
+  //   console.log(this.name);
   video[this.name] = this.value;
 }
-
-setInterval(() => {
-  let currentPercent = Math.floor((video.currentTime / video.duration) * 100);
-  // set the width of the progress bar (flex-basis)
-  progressBar.style["flex-basis"] = `${currentPercent}%`;
-  //   console.log(currentPercent);
-}, 1000);
+// this gets called even if the video isnt playing...
+// setInterval(() => {
+//   let currentPercent = Math.floor((video.currentTime / video.duration) * 100);
+//   // set the width of the progress bar (flex-basis)
+//   progressBar.style["flex-basis"] = `${currentPercent}%`;
+//   //   console.log(currentPercent);
+// }, 1000);
+function handleProgress() {
+  const currentPercent = Math.floor((video.currentTime / video.duration) * 100);
+  progressBar.style.flexBasis = `${currentPercent}%`;
+}
 
 function updateButton() {
   const icon = this.paused ? "►" : "❚ ❚";
@@ -39,6 +43,7 @@ function updateButton() {
 video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton);
 video.addEventListener("pause", updateButton);
+video.addEventListener("timeupdate", handleProgress);
 
 playButton.addEventListener("click", togglePlay);
 
