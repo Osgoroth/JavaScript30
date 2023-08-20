@@ -2,14 +2,13 @@ const video = document.querySelector("video");
 const progressBar = document.querySelector(".progress__filled");
 
 const playButton = document.querySelector(`[title="Toggle Play"]`);
-const volumeButton = document.querySelector(`[name="volume"]`);
-const playbackRateButton = document.querySelector(`[name="playbackRate"]`);
+const rangeButtons = document.querySelectorAll(`[type="range"]`);
 
 const skipButtons = document.querySelectorAll(`[data-skip]`);
 
 function skip() {
   console.log("skipped");
-  video.currentTime = video.currentTime + Number(this.dataset.skip);
+  video.currentTime += parseFloat(this.dataset.skip);
 }
 
 function togglePlay() {
@@ -20,12 +19,9 @@ function togglePlay() {
   }
 }
 
-function changeVolume() {
-  video.volume = this.value;
-}
-
-function changePlaybackRate() {
-  video.playbackRate = this.value;
+function handleRangeUpdate() {
+  console.log(this.name);
+  video[this.name] = this.value;
 }
 
 setInterval(() => {
@@ -45,8 +41,10 @@ video.addEventListener("play", updateButton);
 video.addEventListener("pause", updateButton);
 
 playButton.addEventListener("click", togglePlay);
-volumeButton.addEventListener("change", changeVolume);
-playbackRateButton.addEventListener("change", changePlaybackRate);
+
+rangeButtons.forEach((range) =>
+  range.addEventListener("change", handleRangeUpdate)
+);
 
 skipButtons.forEach((button) => button.addEventListener("click", skip));
 
