@@ -8,8 +8,6 @@ const playbackRateButton = document.querySelector(`[name="playbackRate"]`);
 const skip10 = document.querySelector(`[data-skip="-10"]`);
 const skip25 = document.querySelector(`[data-skip="25"]`);
 
-let isPlaying = false;
-
 function skipBack() {
   //   console.log(video.currentTime);
 
@@ -25,12 +23,10 @@ function skipForward() {
 }
 
 function togglePlay() {
-  if (isPlaying) {
-    video.pause();
-    isPlaying = false;
-  } else {
+  if (video.paused) {
     video.play();
-    isPlaying = true;
+  } else {
+    video.pause();
   }
 }
 
