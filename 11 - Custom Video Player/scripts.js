@@ -5,21 +5,11 @@ const playButton = document.querySelector(`[title="Toggle Play"]`);
 const volumeButton = document.querySelector(`[name="volume"]`);
 const playbackRateButton = document.querySelector(`[name="playbackRate"]`);
 
-const skip10 = document.querySelector(`[data-skip="-10"]`);
-const skip25 = document.querySelector(`[data-skip="25"]`);
+const skipButtons = document.querySelectorAll(`[data-skip]`);
 
-function skipBack() {
-  //   console.log(video.currentTime);
-
-  video.currentTime = video.currentTime - 10;
-  console.log(video.currentTime);
-}
-
-function skipForward() {
-  //   console.log(video.currentTime);
-
-  video.currentTime = video.currentTime + 25;
-  //   console.log(video.currentTime);
+function skip() {
+  console.log("skipped");
+  video.currentTime = video.currentTime + Number(this.dataset.skip);
 }
 
 function togglePlay() {
@@ -45,9 +35,20 @@ setInterval(() => {
   //   console.log(currentPercent);
 }, 1000);
 
+function updateButton() {
+  const icon = this.paused ? "►" : "❚ ❚";
+  playButton.textContent = icon;
+}
+
 video.addEventListener("click", togglePlay);
+video.addEventListener("play", updateButton);
+video.addEventListener("pause", updateButton);
+
 playButton.addEventListener("click", togglePlay);
 volumeButton.addEventListener("change", changeVolume);
 playbackRateButton.addEventListener("change", changePlaybackRate);
-skip10.addEventListener("click", skipBack);
-skip25.addEventListener("click", skipForward);
+
+skipButtons.forEach((button) => button.addEventListener("click", skip));
+
+// skip10.addEventListener("click", skipBack);
+// skip25.addEventListener("click", skipForward);
