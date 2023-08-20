@@ -96,44 +96,46 @@
     </div>
 
     <script>
-      const checkboxNodes = document.querySelectorAll(".item input");
+      const checkboxNodes = document.querySelectorAll(
+        `.item input[type="checkbox"]`
+      );
       const checkboxes = Array.from(checkboxNodes);
       console.table(checkboxes);
-      let first = 0;
-      let last = 0;
-      let shifted = false;
+      let firstChecked = 0;
+      let lastChecked = 0;
+      let shiftKeyPressed = false;
 
       function handleCheck() {
-        if (shifted) {
-          last = checkboxes.indexOf(this);
+        if (shiftKeyPressed) {
+          lastChecked = checkboxes.indexOf(this);
           // check all the ones between first and last
-          if (first < last) {
-            for (let i = first; i <= last; i++) {
+          if (firstChecked < lastChecked) {
+            for (let i = firstChecked; i <= lastChecked; i++) {
               checkboxes[i].checked = true;
             }
           } else {
-            for (let i = last; i <= first; i++) {
+            for (let i = lastChecked; i <= firstChecked; i++) {
               checkboxes[i].checked = true;
             }
           }
         } else {
-          first = checkboxes.indexOf(this);
+          firstChecked = checkboxes.indexOf(this);
         }
-        console.log(first);
-        console.log(last);
+        console.log(firstChecked);
+        console.log(lastChecked);
       }
 
       function handleKeyDown(e) {
         if (e.keyCode === 16) {
-          shifted = !shifted;
+          shiftKeyPressed = !shiftKeyPressed;
         }
-        console.log(shifted);
+        console.log(shiftKeyPressed);
       }
 
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("keyup", handleKeyDown);
       checkboxes.forEach((checkbox) =>
-        checkbox.addEventListener("change", handleCheck)
+        checkbox.addEventListener("click", handleCheck)
       );
 
       // user checks one box then holds shift and clicks another
