@@ -52,12 +52,21 @@
         <input type="text" name="item" placeholder="Item Name" required />
         <input type="submit" value="+ Add Item" />
       </form>
+      <div class="buttonWrapper">
+        <button id="delete-items" class="btn">Delete All</button>
+        <button id="check-all" class="btn">Check All</button>
+        <button id="uncheck-all" class="btn">Uncheck All</button>
+      </div>
     </div>
 
     <script>
+      // TODO: add a delete all, check all and uncheck all
       //get the elements we want to work with
       const addItems = document.querySelector(".add-items");
       const itemsList = document.querySelector(".plates");
+      const deleteItems = document.querySelector("#delete-items");
+      const checkItems = document.querySelector("#check-all");
+      const uncheckItems = document.querySelector("#uncheck-all");
 
       // get the items form local storage (or a blank array if none exist)
       const items = JSON.parse(localStorage.getItem("items")) || [];
@@ -104,9 +113,30 @@
         //update the list shown
         populateList(items, itemsList);
       }
+      // delete all
+      function deleteAll(e) {
+        // remove all items from localStorage
+        localStorage.removeItem("items");
+        //clear the array
+        items.length = 0;
+        //update the list with an empty items array
+        populateList(items, itemsList);
+      }
+      //check all
+      function checkAll(flag) {
+        //get all the items and set done to true
+        items.map((item) => (item.done = flag));
+        // then update the localStorage items
+        localStorage.setItem("items", JSON.stringify(items));
+        //update the list shown
+        populateList(items, itemsList);
+      }
       //wire up event listeners
       addItems.addEventListener("submit", addItem);
       itemsList.addEventListener("click", toggleDone);
+      deleteItems.addEventListener("click", deleteAll);
+      checkItems.addEventListener("click", () => checkAll(true));
+      uncheckItems.addEventListener("click", () => checkAll(false));
 
       // on page load populate the list with either the localStorage items or empty array
       populateList(items, itemsList);
