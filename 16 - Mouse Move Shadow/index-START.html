@@ -1,41 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Mouse Shadow</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mouse Shadow</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <div class="hero">
+      <h1 contenteditable>🔥WOAH!</h1>
+    </div>
 
-  <div class="hero">
-    <h1 contenteditable>🔥WOAH!</h1>
-  </div>
+    <style>
+      html {
+        color: black;
+        font-family: sans-serif;
+      }
 
-  <style>
-  html {
-    color: black;
-    font-family: sans-serif;
-  }
+      body {
+        margin: 0;
+      }
 
-  body {
-    margin: 0;
-  }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+      }
 
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-  }
+      h1 {
+        text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+        font-size: 100px;
+      }
+    </style>
 
-  h1 {
-    text-shadow: 10px 10px 0 rgba(0,0,0,1);
-    font-size: 100px;
-  }
-  </style>
+    <script>
+      const hero = document.querySelector(".hero");
+      const text = hero.querySelector("h1");
+      const walk = 100; //100px
 
-<script>
-</script>
-</body>
+      function shadow(e) {
+        // console.log(e);
+        // const width = hero.offsetWidth;
+        // const height = hero.offsetHeight;
+        // get the width and height of the thing we hovered over (hero)
+        const { offsetWidth: width, offsetHeight: height } = hero;
+        // position of the cursor
+        let { offsetX: x, offsetY: y } = e;
+        //normalise the x and y values
+        // this will be the thing that listented on (hero)
+        // target is what triggers the event (hero or the inner element)
+        // if they arent the same then we need to normalise the x and y values
+        //needed for nested elements
+        if (this !== e.target) {
+          // if we hover over something that isnt the hero then we need to modify x and y to be an offset from the left and top
+          x = x + e.target.offsetLeft;
+          y = y + e.target.offsetTop;
+        }
+
+        // work out the percentage we are across the screen in x and y and use that to calulate the walk
+        // if we are 250px across a 500px element then x/width would be 0.5 * walk(100) = 50 - 50/2 (25) = 25 which is 50% of the positive walk distance
+        //  so we walk the shadow over 25px
+        const xWalk = Math.round((x / width) * walk - walk / 2); // got from 50 to -50 in x
+        const yWalk = Math.round((y / height) * walk - walk / 2); // got from 50 to -50 in y
+
+        text.style.textShadow = `
+          ${xWalk}px ${yWalk}px 0 rgba(255,0,0,0.7),
+          ${xWalk * -1}px ${yWalk}px 0 rgba(0,255,0,0.7),
+          ${yWalk}px ${xWalk * -1}px 0 rgba(0,0,255,0.7),
+          ${yWalk * -1}px ${xWalk}px 0 rgba(255,0,255,0.7)
+        `;
+        // console.log(xWalk, yWalk);
+      }
+
+      hero.addEventListener("mousemove", shadow);
+    </script>
+  </body>
 </html>
