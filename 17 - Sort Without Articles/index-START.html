@@ -1,56 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Sort Without Articles</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sort Without Articles</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background: url("https://source.unsplash.com/nDqA4d5NL0k/2000x2000");
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        min-height: 100vh;
+      }
 
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: url("https://source.unsplash.com/nDqA4d5NL0k/2000x2000");
-      background-size: cover;
-      display: flex;
-      align-items: center;
-      min-height: 100vh;
-    }
+      #bands {
+        list-style: inside square;
+        font-size: 20px;
+        background: white;
+        width: 500px;
+        margin: auto;
+        padding: 0;
+        box-shadow: 0 0 0 20px rgba(0, 0, 0, 0.05);
+      }
 
-    #bands {
-      list-style: inside square;
-      font-size: 20px;
-      background: white;
-      width: 500px;
-      margin: auto;
-      padding: 0;
-      box-shadow: 0 0 0 20px rgba(0, 0, 0, 0.05);
-    }
+      #bands li {
+        border-bottom: 1px solid #efefef;
+        padding: 20px;
+      }
 
-    #bands li {
-      border-bottom: 1px solid #efefef;
-      padding: 20px;
-    }
+      #bands li:last-child {
+        border-bottom: 0;
+      }
 
-    #bands li:last-child {
-      border-bottom: 0;
-    }
+      a {
+        color: #ffc600;
+        text-decoration: none;
+      }
+    </style>
 
-    a {
-      color: #ffc600;
-      text-decoration: none;
-    }
+    <ul id="bands"></ul>
 
-  </style>
+    <script>
+      const bands = [
+        "The Plot in You",
+        "The Devil Wears Prada",
+        "Pierce the Veil",
+        "Norma Jean",
+        "The Bled",
+        "Say Anything",
+        "The Midway State",
+        "We Came as Romans",
+        "Counterparts",
+        "Oh, Sleeper",
+        "A Skylit Drive",
+        "Anywhere But Here",
+        "An Old Dog",
+      ];
 
-  <ul id="bands"></ul>
+      //need a regex to check for articles at beginning of the band name
+      //  \b is for a word boundary, so it only matches words not the beginning of a word
+      //  ?: is non capturing, we dont need to store the matche in memory
+      const regex = /^\b(?:the|a|an)\b/i;
 
-<script>
-const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+      //make a function to strip the article off
+      function strip(bandName) {
+        //remove the words that match the regex and then trim to remove any whitespace
+        return bandName.replace(regex, "").trim();
+      }
 
+      const sortedBands = bands.sort(
+        (bandA, bandB) => (strip(bandA) > strip(bandB) ? 1 : -1)
+        //use the strip function to compare the band names
+      );
+      let html = "";
 
-</script>
-
-</body>
+      document.querySelector("#bands").innerHTML = sortedBands
+        .map((bandName) => `<li>${bandName}</li>`)
+        .join("");
+    </script>
+  </body>
 </html>
