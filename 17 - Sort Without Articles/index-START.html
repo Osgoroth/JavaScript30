@@ -76,7 +76,6 @@
         (bandA, bandB) => (strip(bandA) > strip(bandB) ? 1 : -1)
         //use the strip function to compare the band names
       );
-      let html = "";
 
       document.querySelector("#bands").innerHTML = sortedBands
         .map((bandName) => `<li>${bandName}</li>`)
