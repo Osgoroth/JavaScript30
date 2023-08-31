@@ -3,6 +3,7 @@ const canvas = document.querySelector(".photo");
 const ctx = canvas.getContext("2d");
 const strip = document.querySelector(".strip");
 const snap = document.querySelector(".snap");
+let currentInterval;
 
 function getVideo() {
   navigator.mediaDevices
@@ -20,6 +21,12 @@ function getVideo() {
     });
 }
 
+function resetCanvas() {
+  ctx.resetTransform();
+  clearInterval(currentInterval);
+  paintToCanvas();
+}
+
 function paintToCanvas() {
   // get the dimensions of the video stream.
   const width = video.videoWidth;
@@ -29,25 +36,26 @@ function paintToCanvas() {
   canvas.width = width;
   canvas.height = height;
   // if we return the interval we can then stop it.
-  return setInterval(() => {
+  // video.style.transform("scale(-1");
+
+  return (currentInterval = setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height);
+
     //take the pixels out
     let pixels = ctx.getImageData(0, 0, width, height);
 
     // apply a filter
-    // pixels = redEffect(pixels);
-    // pixels = rgbSplit(pixels);
     // write the pixels that we have but also show the previous ones for 10 more frames
     // apply 10% transparency for each frame
     // keep stacking the frames up on the canvas
     // ctx.globalAlpha = 0.1;
     // put them back in
-
-    pixels = greenScreen(pixels);
+    // pixels = redEffect(pixels);
+    // pixels = rgbSplit(pixels);
+    // pixels = greenScreen(pixels);
 
     ctx.putImageData(pixels, 0, 0);
-    debugger;
-  }, 16);
+  }, 16));
 }
 
 function takePhoto() {
@@ -117,7 +125,60 @@ function greenScreen(pixels) {
 }
 // Filter ideas
 // Mirror
+function verticalMirror() {
+  // clear the current interval before adding a new one so it doesnt overlap
+  clearInterval(currentInterval);
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+  canvas.width = width;
+  canvas.height = height;
+  // mirror along the vertical axis
+  // split the image in half
+  // duplicate and flip horizontally
+
+  if (video.error) return 0;
+  console.log();
+
+  return (currentInterval = setInterval(() => {
+    //   drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+    // modify the video
+    // console.log(video);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.scale(-1, 1);
+    ctx.translate(-canvas.width, 0);
+    //  the original
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      width / 2,
+      height,
+      0,
+      0,
+      canvas.width / 2,
+      canvas.height
+    );
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.translate(-canvas.width / 2, 0);
+    ctx.drawImage(
+      video,
+      width / 2,
+      0,
+      width,
+      height,
+      width / 2,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    ctx.restore();
+  }, 16));
+}
 // Kaleidoscope
+
 getVideo();
 // listen for the video event 'canplay' to be emmited then paint the video to the canvas
 video.addEventListener("canplay", paintToCanvas);
+// video.addEventListener("canplay", () => paintToCanvas());
