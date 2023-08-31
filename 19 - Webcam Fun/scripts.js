@@ -3,7 +3,7 @@ const canvas = document.querySelector(".photo");
 const ctx = canvas.getContext("2d");
 const strip = document.querySelector(".strip");
 const snap = document.querySelector(".snap");
-let currentInterval;
+let currentInterval = null;
 
 function getVideo() {
   navigator.mediaDevices
@@ -24,6 +24,7 @@ function getVideo() {
 function resetCanvas() {
   ctx.resetTransform();
   clearInterval(currentInterval);
+  currentInterval = null;
   paintToCanvas();
 }
 
@@ -75,6 +76,8 @@ function takePhoto() {
   //   console.log(data);
 }
 
+// TODO: make these effects toggleable
+
 function redEffect(pixels) {
   // pixels.data is the array we need to access to apply colour changes
   for (let i = 0; i < pixels.data.length; i += 4) {
@@ -123,11 +126,12 @@ function greenScreen(pixels) {
   }
   return pixels;
 }
-// Filter ideas
+
 // Mirror
 function verticalMirror() {
   // clear the current interval before adding a new one so it doesnt overlap
   clearInterval(currentInterval);
+  currentInterval = null;
   const width = video.videoWidth;
   const height = video.videoHeight;
   canvas.width = width;
@@ -176,7 +180,8 @@ function verticalMirror() {
     ctx.restore();
   }, 16));
 }
-// Kaleidoscope
+// TODO: Kaleidoscope
+// 
 
 getVideo();
 // listen for the video event 'canplay' to be emmited then paint the video to the canvas
